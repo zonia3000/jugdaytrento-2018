@@ -1,6 +1,8 @@
 package net.zonia3000.jugdemo;
 
 import javax.enterprise.context.RequestScoped;
+import javax.faces.push.Push;
+import javax.faces.push.PushContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -13,6 +15,10 @@ public class ChatPage {
 
     @Inject
     private ChatApp app;
+
+    @Inject
+    @Push
+    private PushContext chatChannel;
 
     private String messageText;
 
@@ -28,5 +34,6 @@ public class ChatPage {
         ChatMessage msg = new ChatMessage(user.getUsername(), messageText);
         app.getMessages().add(msg);
         messageText = null;
+        chatChannel.send("newMessage");
     }
 }

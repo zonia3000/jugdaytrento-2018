@@ -7,7 +7,11 @@
 
     <h:head>
         <title>JSF Chat - JUG Day Trento</title>
-        <script></script>
+        <script>
+            function onMessage(msg) {
+                console.log(msg);
+            }
+        </script>
     </h:head>
 
     <h:body>        
@@ -25,6 +29,7 @@
             Nuovo messaggio: 
             <h:inputText value="#{chatPage.messageText}" id="msg" />
             <h:commandButton value="Invia messaggio" action="#{chatPage.sendMessage()}">
+                <f:ajax execute="msg" render="msg" />
             </h:commandButton>
 
             <h2>Messaggi:</h2>
@@ -39,6 +44,11 @@
             </h:panelGroup>
         </h:form>
 
+        <h:form>
+            <f:websocket channel="chatChannel" onmessage="onMessage">
+                <f:ajax event="newMessage" render=":chat:messaggi" />
+            </f:websocket>
+        </h:form>
     </h:body>
 </html>
 
